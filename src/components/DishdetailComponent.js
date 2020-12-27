@@ -28,7 +28,13 @@ class CommentForm extends Component {
     this.setState({ ...this.state, isModalOpen: !this.state.isModalOpen });
   };
   handleSubmit = (values) => {
-    alert(JSON.stringify(values));
+    this.props.addComment(
+      this.props.dish.id,
+      values.rating,
+      values.name,
+      values.comment
+    );
+    this.toggleModal();
   };
   render() {
     const maxLength = (len) => (val) => !val || val.length <= len;
@@ -132,7 +138,7 @@ function RenderDish({ dish }) {
   }
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, dish, addComment }) {
   if (comments == null) {
     return <div></div>;
   } else {
@@ -159,7 +165,7 @@ function RenderComments({ comments }) {
           );
         })}
 
-        <CommentForm></CommentForm>
+        <CommentForm dish={dish} addComment={addComment}></CommentForm>
       </div>
     );
   }
@@ -185,7 +191,11 @@ const Dishdetail = (props) => {
           <RenderDish dish={props.dish} />
         </div>
         <div className="col-12 col-md-5 m-1">
-          <RenderComments comments={props.comments} />
+          <RenderComments
+            comments={props.comments}
+            addComment={props.addComment}
+            dish={props.dish}
+          />
         </div>
       </div>
     </div>
